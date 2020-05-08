@@ -22,8 +22,8 @@ func TestGetAllTodo(t *testing.T) {
 	testServer := setupServer(repo)
 
 	todo := &model.Todo{
-		Title:  "My Task1",
-		UserID: 0,
+		Title: "My Task1",
+		Token: "",
 	}
 
 	_, err := repo.Insert(todo)
@@ -76,8 +76,8 @@ func TestInsertTodo(t *testing.T) {
 
 	wantTodo := []model.Todo{
 		{
-			Title:  "My Task1",
-			UserID: 0,
+			Title: "My Task1",
+			Token: "",
 		},
 	}
 
@@ -91,8 +91,8 @@ func TestGetTodo(t *testing.T) {
 	testServer := setupServer(repo)
 
 	todo := &model.Todo{
-		Title:  "My Task1",
-		UserID: 0,
+		Title: "My Task1",
+		Token: "",
 	}
 
 	id, err := repo.Insert(todo)
@@ -123,8 +123,8 @@ func TestUpdateTodo(t *testing.T) {
 	testServer := setupServer(repo)
 
 	id, err := repo.Insert(&model.Todo{
-		Title:  "My Task1",
-		UserID: 0,
+		Title: "My Task1",
+		Token: "",
 	})
 
 	body := []byte(`{"title":"My Task2","user_id":0}`)
@@ -143,9 +143,9 @@ func TestUpdateTodo(t *testing.T) {
 	}
 
 	want := model.Todo{
-		ID:     1,
-		Title:  "My Task2",
-		UserID: 0,
+		ID:    1,
+		Title: "My Task2",
+		Token: "",
 	}
 
 	if !reflect.DeepEqual(got, want) {
@@ -158,8 +158,8 @@ func TestDeleteTodo(t *testing.T) {
 	testServer := setupServer(repo)
 
 	id, err := repo.Insert(&model.Todo{
-		Title:  "My Task1",
-		UserID: 0,
+		Title: "My Task1",
+		Token: "",
 	})
 
 	req, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("http://localhost:8088/todo/%d", id), nil)

@@ -31,7 +31,7 @@ func (p *Todos) GetAll() ([]model.Todo, error) {
 	var todoList []model.Todo
 	for rows.Next() {
 		var t model.Todo
-		if err := rows.Scan(&t.ID, &t.Title, &t.UserID); err != nil {
+		if err := rows.Scan(&t.ID, &t.Title, &t.Token); err != nil {
 			return nil, err
 		}
 		todoList = append(todoList, t)
@@ -47,7 +47,7 @@ func (p *Todos) Insert(todo *model.Todo) (int, error) {
         RETURNING id;
     `
 
-	rows, err := p.DB.Query(query, todo.Title, todo.UserID)
+	rows, err := p.DB.Query(query, todo.Title, todo.Token)
 	if err != nil {
 		return -1, err
 	}
@@ -77,7 +77,7 @@ func (p *Todos) Get(id int) (model.Todo, error) {
 	var todo model.Todo
 	for rows.Next() {
 		var t model.Todo
-		if err := rows.Scan(&t.ID, &t.Title, &t.UserID); err != nil {
+		if err := rows.Scan(&t.ID, &t.Title, &t.Token); err != nil {
 			return model.Todo{}, err
 		}
 		todo = t
@@ -93,7 +93,7 @@ func (p *Todos) Update(todo *model.Todo) error {
         RETURNING id;
     `
 
-	_, err := p.DB.Query(query, todo.ID, todo.Title, todo.UserID)
+	_, err := p.DB.Query(query, todo.ID, todo.Title, todo.Token)
 	if err != nil {
 		return err
 	}

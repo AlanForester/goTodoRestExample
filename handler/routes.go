@@ -11,7 +11,7 @@ func SetUpRouting(repo *repo.Todos) *http.ServeMux {
 	}
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/todo/", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/todo/", AuthMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
 			todoHandler.getTodo(w, r)
@@ -22,8 +22,8 @@ func SetUpRouting(repo *repo.Todos) *http.ServeMux {
 		default:
 			responseError(w, http.StatusNotFound, "")
 		}
-	})
-	mux.HandleFunc("/todo", func(w http.ResponseWriter, r *http.Request) {
+	}))
+	mux.HandleFunc("/todo", AuthMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
 			todoHandler.getAllTodo(w, r)
@@ -32,7 +32,7 @@ func SetUpRouting(repo *repo.Todos) *http.ServeMux {
 		default:
 			responseError(w, http.StatusNotFound, "")
 		}
-	})
+	}))
 
 	return mux
 }

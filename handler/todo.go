@@ -44,6 +44,8 @@ func (handler *todoHandler) insertTodo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	todo.Token = r.Header.Get("Authorization")
+
 	id, err := service.Insert(ctx, &todo)
 	if err != nil {
 		responseError(w, http.StatusInternalServerError, err.Error())
