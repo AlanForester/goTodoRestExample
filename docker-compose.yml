@@ -1,0 +1,16 @@
+version: "3.6"
+
+services:
+  db:
+    build: "./postgres"
+    restart: "always"
+    environment:
+      POSTGRES_DB: "todo"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+  api:
+    build: "."
+    depends_on:
+      - db
+    ports:
+      - 8088:8088

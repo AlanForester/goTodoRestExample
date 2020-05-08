@@ -22,6 +22,9 @@ $(NAME): *.go
 run:
 	go run main.go
 
+test:
+	go test ./tests/...
+
 release:
 	mkdir -p deploy/releases/$(NAME)-"$(VERSION)"
 	/src/$(NAME)
