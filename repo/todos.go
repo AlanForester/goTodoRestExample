@@ -42,8 +42,8 @@ func (p *Todos) GetAll() ([]model.Todo, error) {
 
 func (p *Todos) Insert(todo *model.Todo) (int, error) {
 	query := `
-        INSERT INTO todos (id, title, user_id)
-        VALUES (nextval('todo_id'), $1, $2)
+        INSERT INTO todos (title, user_id)
+        VALUES ($1, $2)
         RETURNING id;
     `
 
@@ -115,7 +115,7 @@ func (p *Todos) Delete(id int) error {
 }
 
 func ConnectPostgres() (*Todos, error) {
-	connStr := "postgres://postgres:postgres@db/todo?sslmode=disable"
+	connStr := "postgres://postgres@db/todo?sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return nil, err

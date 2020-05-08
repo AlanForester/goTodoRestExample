@@ -6,7 +6,6 @@ import (
 
 const createTable = `
 DROP TABLE IF EXISTS todos;
-ALTER SEQUENCE todo_id RESTART WITH 1;
 CREATE TABLE todos (
   ID serial PRIMARY KEY,
   TITLE TEXT NOT NULL,
@@ -32,7 +31,7 @@ func Setup() *sql.DB {
 }
 
 func connectPostgresForTests() (*sql.DB, error) {
-	connStr := "postgres://postgres@db:5432/todo_test?sslmode=disable"
+	connStr := "postgres://postgres@db:5432/todo?sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return nil, err

@@ -4,13 +4,12 @@ ADD . ${dir}
 RUN apk update && \
     apk add --virtual build-dependencies build-base git && \
     cd ${dir} && \
-    go get -u github.com/lib/pq && \
-    go build -o api
+    make install && \
+    make builds
 
 # final stage
 FROM alpine:3.7
 ARG dir=/todo
 WORKDIR /app
+
 COPY --from=build ${dir}/api /app/
-EXPOSE 8088
-CMD ./api

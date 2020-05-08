@@ -1,16 +1,24 @@
-version: "3.6"
-
+version: '3'
 services:
   db:
-    build: "./postgres"
-    restart: "always"
+    image: postgres:10-alpine
+    command: -c shared_preload_libraries='pg_stat_statements' -c pg_stat_statements.max=10000 -c pg_stat_statements.track=all
+    ports:
+      - 5432:5432
     environment:
-      POSTGRES_DB: "todo"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
+      - POSTGRES_DB=todo
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - ./scripts/postgres-schema:/docker-entrypoint-initdb.d
   api:
     build: "."
-    depends_on:
-      - db
+    command:
+      - ./api
     ports:
       - 8088:8088
+    links:
+      - db
+    depends_on:
+      - db

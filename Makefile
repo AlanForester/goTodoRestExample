@@ -1,6 +1,6 @@
 # ./Makefile
 VERSION := $(shell date +'%Y%m%d%H').$(shell git rev-parse --short=8 HEAD)
-NAME := $(shell echo core)
+NAME := $(shell echo api)
 
 GOPWD := $(shell pwd)
 GOBASEDIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
@@ -17,15 +17,22 @@ all:
 
 builds: $(NAME)
 $(NAME): *.go
-	go build -o ./deploy/build/$(NAME) -v
+	go build -o $(NAME) -v
+
+install:
+	go install -v ./...
+	make test
 
 run:
 	go run main.go
 
 test:
-	go test ./tests/...
+	go test -v ./...
 
-release:
+docker:
+	docker-compose up --force-recreate --renew-anon-volumes --remove-orphans
+
+release: install
 	mkdir -p deploy/releases/$(NAME)-"$(VERSION)"
 	/src/$(NAME)
 
