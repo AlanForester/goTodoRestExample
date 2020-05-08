@@ -10,6 +10,8 @@ func SetUpRouting(repo *repo.Todos) *http.ServeMux {
 		repo: repo,
 	}
 
+	proxyHandler := &proxyHandler{}
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("/todo/", AuthMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
@@ -33,6 +35,15 @@ func SetUpRouting(repo *repo.Todos) *http.ServeMux {
 			responseError(w, http.StatusNotFound, "")
 		}
 	}))
+
+	mux.HandleFunc("/check", func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodPost:
+			proxyHandler.check(w, r)
+		default:
+			responseError(w, http.StatusNotFound, "")
+		}
+	})
 
 	return mux
 }
