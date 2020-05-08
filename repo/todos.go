@@ -2,7 +2,7 @@ package repo
 
 import (
 	"database/sql"
-
+	"fmt"
 	"github.com/AlexCollin/goTodoRestExample/model"
 
 	_ "github.com/lib/pq"
@@ -115,7 +115,12 @@ func (p *Todos) Delete(id int) error {
 }
 
 func ConnectPostgres() (*Todos, error) {
-	connStr := "postgres://postgres@db/todo?sslmode=disable"
+	conf := model.NewConfig()
+	connStr := fmt.Sprintf("postgres://%s", conf.Postgres.User)
+	if conf.Postgres.Pass != "" {
+		connStr += fmt.Sprintf(":%s", conf.Postgres.Pass)
+	}
+	connStr += fmt.Sprintf("@%s/%s?sslmode=disable", conf.Postgres.Host, conf.Postgres.Name)
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return nil, err

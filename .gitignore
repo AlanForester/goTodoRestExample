@@ -55,7 +55,6 @@ vendor/*
 *_env
 
 frontend/.next/
-/config/config.yaml
 data/
 
 logs/*
@@ -64,3 +63,4 @@ logs/*
 
 go.sum
 .idea/
+config/
