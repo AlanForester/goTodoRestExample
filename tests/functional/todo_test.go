@@ -23,7 +23,7 @@ func TestGetAllTodo(t *testing.T) {
 
 	todo := &model.Todo{
 		Title: "My Task1",
-		Token: "",
+		Token: "123",
 	}
 
 	_, err := repo.Insert(todo)
@@ -31,7 +31,7 @@ func TestGetAllTodo(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	req, err := http.NewRequest(http.MethodGet, "http://localhost:8088/todo", nil)
+	req, err := http.NewRequest(http.MethodGet, "http://localhost:8088/todo?token=123", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -41,7 +41,7 @@ func TestGetAllTodo(t *testing.T) {
 
 	got := strings.TrimSpace(rec.Body.String())
 
-	want := `[{"id":1,"title":"My Task1","user_id":0}]`
+	want := `[{"id":1,"title":"My Task1","token":"123"}]`
 
 	if len(got) == 0 {
 		t.Fatalf("Want: %v, Got: %v", want, got)
@@ -52,9 +52,9 @@ func TestInsertTodo(t *testing.T) {
 	repo := &repo.Todos{tests.Setup()}
 	testServer := setupServer(repo)
 
-	body := []byte(`{"title":"My Task1","user_id":0}`)
+	body := []byte(`{"title":"My Task1","token":"123"}`)
 
-	req, err := http.NewRequest(http.MethodPost, "http://localhost:8088/todo", bytes.NewReader(body))
+	req, err := http.NewRequest(http.MethodPost, "http://localhost:8088/todo?token=123", bytes.NewReader(body))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -77,7 +77,7 @@ func TestInsertTodo(t *testing.T) {
 	wantTodo := []model.Todo{
 		{
 			Title: "My Task1",
-			Token: "",
+			Token: "123",
 		},
 	}
 
@@ -92,7 +92,7 @@ func TestGetTodo(t *testing.T) {
 
 	todo := &model.Todo{
 		Title: "My Task1",
-		Token: "",
+		Token: "123",
 	}
 
 	id, err := repo.Insert(todo)
@@ -100,7 +100,7 @@ func TestGetTodo(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	url := fmt.Sprintf("http://localhost:8088/todo/%d", id)
+	url := fmt.Sprintf("http://localhost:8088/todo/%d?token=123", id)
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		t.Fatal(err)
@@ -111,7 +111,7 @@ func TestGetTodo(t *testing.T) {
 
 	got := strings.TrimSpace(rec.Body.String())
 
-	want := `{"id":1,"title":"My Task1","user_id":0}`
+	want := `{"id":1,"title":"My Task1","token":"123"}`
 
 	if got != want {
 		t.Fatalf("Want: %v, Got: %v", want, got)
@@ -124,12 +124,12 @@ func TestUpdateTodo(t *testing.T) {
 
 	id, err := repo.Insert(&model.Todo{
 		Title: "My Task1",
-		Token: "",
+		Token: "123",
 	})
 
-	body := []byte(`{"title":"My Task2","user_id":0}`)
+	body := []byte(`{"title":"My Task2","token":"123"}`)
 
-	req, err := http.NewRequest(http.MethodPut, fmt.Sprintf("http://localhost:8088/todo/%d", id), bytes.NewReader(body))
+	req, err := http.NewRequest(http.MethodPut, fmt.Sprintf("http://localhost:8088/todo/%d?token=123", id), bytes.NewReader(body))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -145,7 +145,7 @@ func TestUpdateTodo(t *testing.T) {
 	want := model.Todo{
 		ID:    1,
 		Title: "My Task2",
-		Token: "",
+		Token: "123",
 	}
 
 	if !reflect.DeepEqual(got, want) {
@@ -159,10 +159,10 @@ func TestDeleteTodo(t *testing.T) {
 
 	id, err := repo.Insert(&model.Todo{
 		Title: "My Task1",
-		Token: "",
+		Token: "123",
 	})
 
-	req, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("http://localhost:8088/todo/%d", id), nil)
+	req, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("http://localhost:8088/todo/%d?token=123", id), nil)
 	if err != nil {
 		t.Fatal(err)
 	}

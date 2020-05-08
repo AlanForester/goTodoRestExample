@@ -16,7 +16,7 @@ func TestPostgres_GetAll(t *testing.T) {
 
 	todo := &model.Todo{
 		Title: "title1",
-		Token: "",
+		Token: "123",
 	}
 
 	_, err := todos.Insert(todo)
@@ -33,7 +33,7 @@ func TestPostgres_GetAll(t *testing.T) {
 		{
 			ID:    1,
 			Title: "title1",
-			Token: "",
+			Token: "123",
 		},
 	}
 
@@ -48,7 +48,7 @@ func TestPostgres_Insert(t *testing.T) {
 
 	todo := &model.Todo{
 		Title: "title1",
-		Token: "",
+		Token: "123",
 	}
 
 	got, err := todos.Insert(todo)
@@ -69,7 +69,7 @@ func TestPostgres_Get(t *testing.T) {
 
 	todo := &model.Todo{
 		Title: "title1",
-		Token: "",
+		Token: "123",
 	}
 
 	id, err := todos.Insert(todo)
@@ -85,7 +85,7 @@ func TestPostgres_Get(t *testing.T) {
 	want := &model.Todo{
 		ID:    1,
 		Title: "title1",
-		Token: "",
+		Token: "123",
 	}
 
 	if equal(got, want) {
@@ -99,7 +99,7 @@ func TestPostgres_Update(t *testing.T) {
 
 	todo := &model.Todo{
 		Title: "title1",
-		Token: "",
+		Token: "123",
 	}
 
 	_, err := todos.Insert(todo)
@@ -119,7 +119,7 @@ func TestPostgres_Delete(t *testing.T) {
 
 	todo := &model.Todo{
 		Title: "title1",
-		Token: "",
+		Token: "123",
 	}
 
 	id, err := todos.Insert(todo)
